@@ -244,41 +244,6 @@ static const esp_gatts_attr_db_t gatt_db[HRS_IDX_NB] =
     {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_user_description, ESP_GATT_PERM_READ,
       sizeof(char1_name), sizeof(char1_name), (uint8_t *)char1_name}},
 
-//     /* Characteristic Declaration */
-//     [IDX_CHAR_B]      =
-//     {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_declaration_uuid, ESP_GATT_PERM_READ,
-//       CHAR_DECLARATION_SIZE, CHAR_DECLARATION_SIZE, (uint8_t *)&char_prop_read_write}},
-
-//     /* Characteristic Value */
-//     [IDX_CHAR_VAL_B]  =
-//     {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&CHAR_2_LONG_WR, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
-//       LONG_CHAR_VAL_LEN, sizeof(char_value), (uint8_t *)char_value}},
-
-//        /* Characteristic User Descriptor */
-//     [IDX_CHAR_CFG_B]  =
-//     {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_user_description, ESP_GATT_PERM_READ,
-//       sizeof(char2_name), sizeof(char2_name), (uint8_t *)char2_name}},
-
-//    /* Characteristic Declaration */
-//     [IDX_CHAR_C]      =
-//     {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_declaration_uuid, ESP_GATT_PERM_READ,
-//       CHAR_DECLARATION_SIZE, CHAR_DECLARATION_SIZE, (uint8_t *)&char_prop_notify}},
-
-//     /* Characteristic Value */
-//     [IDX_CHAR_VAL_C]  =
-//     {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&CHAR_3_SHORT_NOTIFY, 0,
-//       LONG_CHAR_VAL_LEN, sizeof(char_value), (uint8_t *)char_value}},
-
-//     /* Characteristic User Descriptor */
-//     [IDX_CHAR_CFG_C]  =
-//     {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_user_description, ESP_GATT_PERM_READ,
-//       sizeof(char3_name), sizeof(char3_name), (uint8_t *)char3_name}},
-
-//     /* Characteristic Client Configuration Descriptor */
-//     [IDX_CHAR_CFG_C_2]  =
-//     {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&character_client_config_uuid, ESP_GATT_PERM_READ | ESP_GATT_PERM_WRITE,
-//       sizeof(uint16_t), sizeof(char_ccc), (uint8_t *)char_ccc}},
-
 };
 
 static void show_bonded_devices(void)
@@ -483,30 +448,6 @@ void example_prepare_write_event_env(esp_gatt_if_t gatts_if, prepare_type_env_t 
     prepare_write_env->prepare_len += param->write.len;
 
 }
-// uint8_t long_write[16] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
-// void example_exec_write_event_env(prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param){
-//     if (param->exec_write.exec_write_flag == ESP_GATT_PREP_WRITE_EXEC && prepare_write_env->prepare_buf){
-//         if(prepare_write_env->prepare_len == 256) {
-//             bool long_write_success = true;
-//             for(uint16_t i = 0; i < prepare_write_env->prepare_len; i ++) {
-//                 if(prepare_write_env->prepare_buf[i] != long_write[i%16]) {
-//                     long_write_success = false;
-//                     break;
-//                 }
-//             }
-//             if(long_write_success) {
-//                 ESP_LOGI(EXAMPLE_TAG, "(4) ***** long write success ***** ");
-//             }
-//         }
-//     }else{
-//         ESP_LOGI(EXAMPLE_TAG,"ESP_GATT_PREP_WRITE_CANCEL");
-//     }
-//     if (prepare_write_env->prepare_buf) {
-//         free(prepare_write_env->prepare_buf);
-//         prepare_write_env->prepare_buf = NULL;
-//     }
-//     prepare_write_env->prepare_len = 0;
-// }
 
 static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
 {
@@ -548,47 +489,10 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
         }
        	    break;
         case ESP_GATTS_READ_EVT:
-            //ESP_LOGE(EXAMPLE_TAG, "ESP_GATTS_READ_EVT, handle=0x%d, offset=%d", param->read.handle, param->read.offset);
-            // if(gatt_db_handle_table[IDX_CHAR_VAL_A] == param->read.handle) {
-            //     ESP_LOGE(EXAMPLE_TAG, "(2) ***** read char1 ***** ");
-            // }
-            // if(gatt_db_handle_table[IDX_CHAR_VAL_B] == param->read.handle) {
-            //     ESP_LOGE(EXAMPLE_TAG, "(5) ***** read char2 ***** ");
-            // }
-       	    // break;
+            break;
         case ESP_GATTS_WRITE_EVT:
             if (!param->write.is_prep){
-                // // the data length of gattc write  must be less than GATTS_EXAMPLE_CHAR_VAL_LEN_MAX.
-                // if (gatt_db_handle_table[IDX_CHAR_CFG_C_2] == param->write.handle && param->write.len == 2){
-                //     uint16_t descr_value = param->write.value[1]<<8 | param->write.value[0];
-                //     uint8_t notify_data[2];
-                //     notify_data[0] = 0xAA;
-                //     notify_data[1] = 0xBB;
-
-                //     if (descr_value == 0x0001){
-                //         //the size of notify_data[] need less than MTU size
-                //         esp_ble_gatts_send_indicate(gatts_if, param->write.conn_id, gatt_db_handle_table[IDX_CHAR_VAL_C],
-                //                                 sizeof(notify_data), notify_data, false);
-                //         ESP_LOGI(EXAMPLE_TAG, "(6) ***** send notify AA BB ***** ");
-                //     }else if (descr_value == 0x0002){
-                //         //the size of indicate_data[] need less than MTU size
-                //         esp_ble_gatts_send_indicate(gatts_if, param->write.conn_id, gatt_db_handle_table[IDX_CHAR_VAL_C],
-                //                             sizeof(notify_data), notify_data, true);
-                //     }
-                //     else if (descr_value == 0x0000){
-                //         ESP_LOGI(EXAMPLE_TAG, "notify/indicate disable ");
-                //     }else{
-                //         ESP_LOGE(EXAMPLE_TAG, "unknown descr value");
-                //         esp_log_buffer_hex(EXAMPLE_TAG, param->write.value, param->write.len);
-                //     }
-
-                // }
                 if(gatt_db_handle_table[IDX_CHAR_VAL_A] == param->write.handle) {
-                    // uint8_t write_data[4] = {0x21, 0x52, 0x19, 0x27};
-                    // if(memcmp(write_data, param->write.value, param->write.len) == 0) {
-                    //     ESP_LOGI(EXAMPLE_TAG, "(3)***** short write success ***** ");
-                    //     printf("ID: 21521927\n");
-                    // }
                     task_ssd1306_set_page(cur_page);
                     printf("ID: %s\n", param->write.value);
                     task_ssd1306_display_text_at_line(param->write.value, cur_page);
@@ -604,11 +508,6 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
                 example_prepare_write_event_env(gatts_if, &prepare_write_env, param);
             }
       	    break;
-        // case ESP_GATTS_EXEC_WRITE_EVT:
-        //     // the length of gattc prepare write data must be less than GATTS_EXAMPLE_CHAR_VAL_LEN_MAX.
-        //     ESP_LOGI(EXAMPLE_TAG, "ESP_GATTS_EXEC_WRITE_EVT, Length=%d",  prepare_write_env.prepare_len);
-        //     example_exec_write_event_env(&prepare_write_env, param);
-        //     break;
         case ESP_GATTS_MTU_EVT:
             EXAMPLE_DEBUG(EXAMPLE_TAG, "ESP_GATTS_MTU_EVT, MTU %d", param->mtu.mtu);
             break;
